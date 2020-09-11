@@ -41,3 +41,4 @@ class Ingredient(Base):
     __tablename__ = 'ingredients'
 
     number = db.Column(db.Integer,nullable=False)
+    # barcode, 
