@@ -1,65 +1,100 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<style>
-.flex-container {
-  display: flex;
-  flex-wrap: nowrap;
-  background-color: DodgerBlue;
-}
-
-.flex-container > div {
-  background-color: #f1f1f1;
-  width: 100px;
-  margin: 10px;
-  text-align: center;
-  line-height: 75px;
-  font-size: 30px;
-}
-</style>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 550px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+        
+    /* On small screens, set height to 'auto' for the grid */
+    @media screen and (max-width: 767px) {
+      .row.content {height: auto;} 
+    }
+  </style>
 </head>
 <body>
-<h1>RPI WEB INTERFACE</h1>
 
-<div class="flex-container">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>  
-  <div>4</div>
+<nav class="navbar navbar-inverse visible-xs">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">Logo</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Dashboard</a></li>
+        <li><a href="#">Age</a></li>
+        <li><a href="#">Gender</a></li>
+        <li><a href="#">Geo</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
+<div class="container-fluid">
+  <div class="row content">
+    <div class="col-sm-2 sidenav hidden-xs">
+      <h2>RPI WEB UI</h2>
+      <ul class="nav nav-pills nav-stacked">
+        <li class="active text-center"><a href="#section1">Dashboard</a></li>
+        <li><a type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#myModal">Create new recipe</a></li>
+      </ul><br>
+    </div>
+    <br>
+    
+    <div class="col-sm-10">
+      {% for list in picklist %}
+      <div class="row">
+        <div class="col-sm-2">
+        </div>
+      {% for item in list%}
+        <div class="col-sm-2">
+          <div class="well">
+            <h4>{{item.number}}</h4>
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog">
+      
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Modal Header</h4>
+          </div>
+          <div class="modal-body">
+            <p>Some text in the modal.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
 </div>
-<div class="flex-container">
-  <div>5</div>
-  <div>6</div>
-  <div>7</div>  
-  <div>8</div>
- 
-</div>
-<div class="flex-container">
-  <div>9</div>
-  <div>10</div>
-  <div>11</div>  
-  <div>12</div>
-
-</div>
-<div class="flex-container">
-  <div>13</div>
-  <div>14</div>
-  <div>15</div>  
-  <div>16</div>
-
-</div>
-<div class="flex-container">
-  <div>17</div>
-  <div>18</div>
-  <div>19</div>  
-  <div>20</div>
-
-</div>
-
-<p>Try to resize the browser window.</p>
-<p>A container with "flex-wrap: nowrap;" will never wrap its items.</p>
-<p><strong>Note:</strong> Flexbox is not supported in Internet Explorer 10 or earlier versions.</p>
 
 </body>
 </html>

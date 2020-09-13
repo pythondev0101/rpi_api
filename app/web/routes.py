@@ -1,7 +1,24 @@
 from flask import render_template, redirect
 from . import bp_web
+from app.models import Pick
 
 
 @bp_web.route('/')
 def index():
-    return render_template('web/index.html')
+    _pick_model = Pick.query.all()
+    _pick_list = [[]]
+    ctr = 0
+    row = 0
+
+    for i in _pick_model:
+
+        if not ctr == 4:
+            _pick_list[row].append(i)
+            ctr += 1
+        else:
+            row += 1
+            _pick_list.append([])
+            _pick_list[row].append(i)
+            ctr = 1
+
+    return render_template('web/index.html',picklist=_pick_list)
