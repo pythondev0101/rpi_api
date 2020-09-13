@@ -25,12 +25,6 @@ class User(Base):
         self.set_password(password)
 
 
-recipe_ingredients = db.Table('recipe_picks',
-    db.Column('pick_id', db.Integer, db.ForeignKey('picks.id'), primary_key=True),
-    db.Column('recipe_id', db.Integer, db.ForeignKey('recipes.id'), primary_key=True)
-)
-
-
 class Recipe(Base):
     __tablename__ = 'recipes'
 
@@ -42,3 +36,12 @@ class Pick(Base):
 
     number = db.Column(db.String(255),nullable=False)
     barcode = db.Column(db.String(255), nullable=True)
+
+class RecipePick(Base):
+    __tablename__ = 'recipe_pick'
+
+    recipe_id = db.Column(db.Integer,db.ForeignKey('recipes.id',ondelete="SET NULL"),nullable=True)
+    recipe = db.relationship('Recipe', backref="recipe_pick")
+    pick_id = db.Column(db.Integer,db.ForeignKey('picks.id',ondelete="SET NULL"),nullable=True)
+    pick = db.relationship('Pick', backref="recipe_pick")
+    order = db.Column(db.Integer,nullable=False)

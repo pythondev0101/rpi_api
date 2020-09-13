@@ -1,7 +1,7 @@
 from flask import (jsonify, abort, request, make_response)
-from app import auth
+from app import auth, db
 from app.api import bp_api
-from app.models import Recipe
+from app.models import Recipe, RecipePick
 
 
 # ------------------------------------- RECIPES APIs ---------------------------------- #
@@ -47,9 +47,37 @@ def create_recipe():
     """
 
     if not request.json:
-        abort(404)
+        abort(400)
     
     if not 'name' in request.json:
-        abort(404)
+        abort(400)
     
-    pass
+    if not 'picklist' in request.json:
+        abort(400)
+    
+    _name = request.json['name']
+    _picklist = request.json['picklist']
+
+    recipe = Recipe()
+    recipe.name = _name
+
+    db.session.add(recipe)
+    db.session.commit()
+
+    ctr = 1
+    for pick in _picklist:
+        recipe_pick = RecipePick(
+            recipe=recipe,
+            pick_id=pick,
+            order=ctr
+        )
+        ctr += 1
+        
+        db.session.add(recipe_pick)
+        db.session.commit()
+    
+    return jsonify({
+        'id': recipe.id,
+        'name': recipe.name,
+        'result': True
+    })
