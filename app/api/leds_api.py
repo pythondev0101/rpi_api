@@ -25,23 +25,57 @@ for id, pin in LEDS.items():
 
 # ------------------------------------- LEDs APIs ---------------------------------- #
 
-@bp_api.route('/v1.0/ledsstatus', methods=['GET'])
+@bp_api.route('/v1.0/leds', methods=['GET'])
 @auth.login_required
-def get_led_status():
-    """ ENDPOINT: /api/v1.0/ledsstatus
+def get_leds():
+    """ ENDPOINT: /api/v1.0/leds
     """
 
-    _leds_status_list = []
+    _leds_list = []
     
     for id, pin in LEDS.items():
         _status = GPIO.input(pin)
 
-        _leds_status_list.append({
+        _leds_list.append({
             'id': id,
             'status': _status,
         })
 
     return jsonify({
-        'leds_status': _leds_status_list
+        'leds': _leds_status_list
     })
+
+
+@bp_api.route('/v1.0/leds/<int:id>', methods=['GET'])
+@auth.login_required
+def get_led(id):
+    """ ENDPOINT: /api/v1.0/leds/<id>
+    """
+    if id not in LEDS:
+        abort(404)
+
+    _led = LEDS[id]
+    _status = GPIO.input(_led)
+
+    return jsonify({
+        'id': id,
+        'pin': _led,
+        'status': _status
+        })
+
+
+@bp_api.route('/v1.0/control-led/<int:id>')
+@auth.login_required
+def control_led(id):
+    """ ENDPOINT: /api/v1.0/control-led/<id>
+    """
+
+    if id not in LEDS:
+        abort(404)
+    
+    if not request.json:
+        abort(400)
+    
+    _state = request.json['']
+    GPIO.output(LEDS[id],)
 
