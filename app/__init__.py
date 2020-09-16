@@ -2,9 +2,13 @@ from flask import Flask, jsonify, make_response, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from config import app_config
 from flask_httpauth import HTTPBasicAuth
+from multiprocessing import Process, Queue
+from app.arduino import Arduino
+
 
 db = SQLAlchemy()
 auth = HTTPBasicAuth()
+qLEDStatus = Queue()
 
 
 def create_app(config_name='development'):
@@ -13,7 +17,13 @@ def create_app(config_name='development'):
     
     db.init_app(app)
 
+    arduino = Arduino()
+
     with app.app_context():
+        # START MULTIPROCESSING
+        arduino_process = Process(target=arduino.test_process, args=(qLEDStatus,))
+        arduino_process.start()
+
         @app.errorhandler(404)
         def not_found(error):
             return make_response(jsonify({"error": "Not found"}), 404)

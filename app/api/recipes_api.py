@@ -2,7 +2,7 @@ from flask import (jsonify, abort, request, make_response)
 from app import auth, db
 from app.api import bp_api
 from app.models import Recipe, RecipePick
-
+from app import qLEDStatus
 
 # ------------------------------------- RECIPES APIs ---------------------------------- #
 
@@ -114,16 +114,7 @@ def get_led_status():
     """ ENDPOINT: /api/v1.0/ledsstatus
     """
 
-    _leds_status_list = []
-    
-    for id, pin in LEDS.items():
-        _status = random.randint(0,1)
-
-
-        _leds_status_list.append({
-            'id': id,
-            'status': _status,
-        })
+    _leds_status_list = qLEDStatus.get()
 
     return jsonify({
         'leds_status': _leds_status_list
