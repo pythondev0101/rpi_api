@@ -92,17 +92,3 @@ def create_recipe():
         'name': recipe.name,
         'result': True
     })
-
-
-@bp_api.route('/v1.0/ledsstatus', methods=['GET'])
-@auth.login_required
-def get_led_status():
-    import random
-    """ ENDPOINT: /api/v1.0/ledsstatus
-    """
-
-    _leds_status_list = qLEDStatus.get()
-
-    return jsonify({
-        'leds_status': _leds_status_list
-    })

@@ -3,10 +3,11 @@ import time
 
 
 class Arduino():
-    # def __init__ (self):
-    #     _serial_name = '/dev/ttyACM0' # ls /dev/tty* (Para malaman kung ano serial name)
-    #     _baudrate = 9600
-    #     self.ser = Serial(_serial_name, _baudrate, timeout=1)
+    def __init__ (self):
+        _serial_name = '/dev/ttyACM0' # ls /dev/tty* (Para malaman kung ano serial name)
+        _baudrate = 9600
+        self.ser = Serial(_serial_name, _baudrate, timeout=1)
+        self.ser.flush()
 
     def test_process(self, qLEDStatus):
         while True:
@@ -32,4 +33,12 @@ class Arduino():
         if self.ser.is_open == False:
             return False
         
+        return True
+
+    def control_led(self, id, state):
+        _led = {
+            'id': id,
+            'state': state
+        }
+        self.ser.write(_led) # Check kung pwede mag send ng dict ng rekta
         return True

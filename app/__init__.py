@@ -9,15 +9,13 @@ from app.arduino import Arduino
 db = SQLAlchemy()
 auth = HTTPBasicAuth()
 qLEDStatus = Queue()
-
+arduino = Arduino()
 
 def create_app(config_name='development'):
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object(app_config[config_name])
     
     db.init_app(app)
-
-    arduino = Arduino()
 
     with app.app_context():
         # START MULTIPROCESSING
