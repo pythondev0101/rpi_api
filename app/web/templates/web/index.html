@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>RPI WEB INTERFACE</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -97,7 +97,7 @@
 
     setInterval(
       function(){
-        $.getJSON('/api/v1.0/ledsstatus',function(data) {                                                
+        $.getJSON('/api/v1.0/leds',function(data) {                                                
           for(i=0; i < data.leds_status.length; ++i){
             var _pick_div = "#pick_" + data.leds_status[i].id;
             if (data.leds_status[i].status == true){

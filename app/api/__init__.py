@@ -22,5 +22,5 @@ def unauthorized():
 
 
 # ------------------------------------- IMPORT ALL APIS ---------------------------------- #
-from . import users_api, recipes_api
+from . import users_api, recipes_api, leds_api
 # ------------------------------------- END IMPORT ALL APIS ---------------------------------- #
