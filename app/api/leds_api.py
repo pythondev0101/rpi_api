@@ -36,7 +36,7 @@ def get_led(id):
     })
  
 
-@bp_api.route('/v1.0/control-led/<int:id>', methods=['GET'])
+@bp_api.route('/v1.0/control-led/<int:id>', methods=['POST'])
 @auth.login_required
 def control_led(id):
     """ ENDPOINT: /api/v1.0/control-led/<id>
@@ -48,11 +48,8 @@ def control_led(id):
     if 'state' not in request.json:
         abort(400)
     
-<<<<<<< HEAD
-=======
     _state = request.json['state']
 
     arduino.control_led(id, state)
 
-    return jsonify("result": True)
->>>>>>> 3552e1ecbf9a1621c30599e1430a73b6ee494c73
+    return jsonify({"result": True})

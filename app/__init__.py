@@ -1,8 +1,9 @@
-from flask import Flask, jsonify, make_response, redirect, url_for
+from flask import Flask, jsonify, make_response, redirect, url_for, g
 from flask_sqlalchemy import SQLAlchemy
-from config import app_config
+from flask_login import LoginManager, current_user
 from flask_httpauth import HTTPBasicAuth
 from multiprocessing import Process, Queue
+from config import app_config
 from app.arduino import Arduino
 
 
@@ -10,12 +11,17 @@ db = SQLAlchemy()
 auth = HTTPBasicAuth()
 qLEDStatus = Queue()
 arduino = Arduino()
+login_manager = LoginManager()
+
 
 def create_app(config_name='development'):
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object(app_config[config_name])
     
     db.init_app(app)
+    login_manager.init_app(app)
+
+    login_manager.login_view = 'bp_web.login'
 
     with app.app_context():
         # START MULTIPROCESSING
@@ -26,9 +32,14 @@ def create_app(config_name='development'):
         def not_found(error):
             return make_response(jsonify({"error": "Not found"}), 404)
 
+        @app.before_request
+        def before_request():
+            g.user = current_user
+
         @app.route('/')
         def index():
-            return redirect(url_for('bp_web.index'))
+            return redirect(url_for('bp_web.login'))
+
         """ REGISTER BLUEPRINT (Project Module) """
         from . import api, web
 

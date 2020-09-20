@@ -18,7 +18,7 @@ def get_recipes():
     for recipe in _recipes:
         _picklist = []
         for pick in recipe.recipe_pick:
-            _picklist.append(pick.id)
+            _picklist.append({'id': pick.id, 'number': pick.pick.number})
 
         _recipes_list.append({
             'id': recipe.id,
@@ -42,7 +42,7 @@ def get_recipe(id):
     
     _picklist = []
     for pick in _recipe.recipe_pick:
-        _picklist.append(pick.id)
+        _picklist.append({'id': pick.id, 'number': pick.pick.number})
 
     return jsonify({
         'id': _recipe.id,

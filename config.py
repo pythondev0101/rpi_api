@@ -6,6 +6,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv()
 
 class Config:
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+
     _db_user = os.getenv('DATABASE_USER')
     _db_password = os.getenv('DATABASE_PASSWORD')
     _db_host = os.getenv('DATABASE_HOST')

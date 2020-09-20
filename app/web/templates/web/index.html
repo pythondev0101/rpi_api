@@ -5,95 +5,69 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('bp_web.static', filename='css/index.css') }}">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <style>
-    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-    .row.content {height: 550px}
-    
-    /* Set gray background color and 100% height */
-    .sidenav {
-      background-color: #f1f1f1;
-      height: 100%;
-    }
-        
-    /* On small screens, set height to 'auto' for the grid */
-    @media screen and (max-width: 767px) {
-      .row.content {height: auto;} 
-    }
-  </style>
+
 </head>
 <body>
+  <div class="wrapper">
+    <!-- Sidebar  -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h4>RPI WEB INTERFACE</h4>
+        </div>
+   
+        <ul class="list-unstyled CTAs">
+          <li><a type="button" data-toggle="modal" data-target="#myModal">Load recipe</a></li>
+          <li><a type="button">Create recipe</a></li>
+        </ul>
 
-<nav class="navbar navbar-inverse visible-xs">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
-      </button>
-      <a class="navbar-brand" href="#">Logo</a>
-    </div>
-  </div>
-</nav>
+        <ul id="ul_picklist" class="list-unstyled components">
+          <p>RECIPE - PICKLIST</p>
+        </ul> 
+    </nav>
 
-<div class="container-fluid">
-  <div class="row content">
-    <div class="col-sm-2 sidenav hidden-xs">
-      <h2>RPI WEB UI</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li class="active text-center"><a href="#section1">Dashboard</a></li>
-        <li><a type="button" class="btn btn-success btn-md">Create new recipe</a></li>
-        <li><a type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#myModal">Load recipe</a></li>
-      </ul><br>
+    <!-- Page Content  -->
+    <div id="content">
+      <div class="col-sm-10">
+        {% for list in picklist %}
+        <div class="row">
+          <div class="col-sm-2">
+          </div>
+        {% for item in list%}
+          <div class="col-sm-2">
+            <div id="pick_{{item.id}}"  class="well text-center pick">
+              <h4>{{item.number}}</h4>
+            </div>
+          </div>
+        {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
     </div>
-    <br>
     
-    <div class="col-sm-10">
-      {% for list in picklist %}
-      <div class="row">
-        <div class="col-sm-2">
-        </div>
-      {% for item in list%}
-        <div class="col-sm-2">
-          <div id="pick_{{item.id}}"  class="well text-center pick">
-            <h4>{{item.number}}</h4>
-          </div>
-        </div>
-      {% endfor %}
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" role="dialog">
-      <div class="modal-dialog">
-      
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Recipe Selection</h4>
-          </div>
-          <div class="modal-body">
-            <label for="select_recipe">Select recipe:</label>
-            <select class="form-control" id="select_recipe">
-              {% for recipe in recipes %}
-              <option value="{{recipe.id}}" >{{recipe.name}}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="modal-footer">
-            <button id="btn_confirm" type="button" class="btn btn-default" data-dismiss="modal">Confirm</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    {% include 'web/create_modal.html' %}
 </div>
+
 <script>
   $(document).ready(function(){
+    $(".pick").click(function(){
+
+      var _pick_id = $(this).attr('id').slice(5);
+      var _url = '/api/v1.0/control-led/' + _pick_id;
+      $(this).css('background-color',"limegreen");
+      $.ajax({
+        url: _url,
+        type: 'POST',
+        dataType: 'json',
+        data: JSON.stringify({'state': 1}),
+        async: false,
+        contentType: "application/json; charset=utf-8",
+        success: function(data){
+        }
+      });
+    });
 
     setInterval(
       function(){
@@ -111,23 +85,39 @@
     1000);
 
     $("#btn_confirm").click(function(){
+      // Reloading elements
+      back_to_default_div_color();
+      $("#ul_picklist").empty();
+
+      // Getting variables
       var _recipe_id = $("#select_recipe").val();
       var _url = '/api/v1.0/recipes/' + _recipe_id;
 
+      // Add new element in GUI
+      var _il = `<p>RECIPE - PICKLIST</p><li class="active">`
+
+      
       $.ajax({
         url: _url,
         type: 'GET',
         dataType: 'json',
+        async: false,
         contentType: "application/json; charset=utf-8",
         success: function(data){
-          back_to_default_div_color();
+          _il += `<a>${data.name}</a><ul class="list-unstyled collapse show" id="homeSubmenu">`;
 
           for (i=0; i < data.picklist.length; ++i){
-            var _pick_div = "#pick_" + data.picklist[i];
-            $(_pick_div).css('background-color',"red");
+            var _pick_div = "#pick_" + data.picklist[i]['id'];
+            $(_pick_div).css('background-color',"lightblue");
+
+            _il += `<li><a>${data.picklist[i]['number']}</a></li>`;
           }
+          
         }
       });
+
+      _il += "</ul></li>";
+      $("#ul_picklist").append(_il);
 
     });
 

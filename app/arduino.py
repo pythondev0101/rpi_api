@@ -3,11 +3,11 @@ import time
 
 
 class Arduino():
-    def __init__ (self):
-        _serial_name = '/dev/ttyACM0' # ls /dev/tty* (Para malaman kung ano serial name)
-        _baudrate = 9600
-        self.ser = Serial(_serial_name, _baudrate, timeout=1)
-        self.ser.flush()
+    # def __init__ (self):
+    #     _serial_name = '/dev/ttyACM0' # ls /dev/tty* (Para malaman kung ano serial name)
+    #     _baudrate = 9600
+    #     self.ser = Serial(_serial_name, _baudrate, timeout=1)
+    #     self.ser.flush()
 
     def test_process(self, qLEDStatus):
         while True:
@@ -35,8 +35,6 @@ class Arduino():
                 {'id': 17,'status':0}, {'id': 14,'status':0}, {'id': 15,'status':0}, {'id': 16,'status':0},
                 {'id': 13,'status':0}, {'id': 14,'status':0}, {'id': 15,'status':0}, {'id': 16,'status':0},
                 {'id': 13,'status':0}, {'id': 14,'status':0}, {'id': 15,'status':0}, {'id': 16,'status':0},
-
-
                 ]
 
             qLEDStatus.put(_status)
