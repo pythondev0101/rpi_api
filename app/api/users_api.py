@@ -54,16 +54,21 @@ def create_user():
     if not 'password' in request.json:
         abort(404)
     
+    if not 'role' in request.json:
+        abort(404)
+    
     _username = request.json['username']
     _password = request.json['password']
-    _user = User(_username,_password)
+    _role = request.json['role']
+    _user = User(_username,_password, _role)
     
     db.session.add(_user)
     db.session.commit()
 
     return jsonify({
         'id': _user.id,
-        'username': _user.username
+        'username': _user.username,
+        'role': _user.role
     })
 
 
@@ -83,6 +88,7 @@ def update_user(id):
         abort(404)
 
     _username = request.json['username']
+    _role = request.json['role']
     _user.username = _username
     db.session.commit()
 

@@ -20,7 +20,7 @@
    
         <ul class="list-unstyled CTAs">
           <li><a type="button" data-toggle="modal" data-target="#myModal">Load recipe</a></li>
-          <li><a type="button">Create recipe</a></li>
+          {% if current_user.role == 'admin' %}<li><a type="button">Create recipe</a></li>{% endif %}
         </ul>
 
         <ul id="ul_picklist" class="list-unstyled components">
@@ -72,9 +72,9 @@
     setInterval(
       function(){
         $.getJSON('/api/v1.0/leds',function(data) {                                                
-          for(i=0; i < data.leds_status.length; ++i){
-            var _pick_div = "#pick_" + data.leds_status[i].id;
-            if (data.leds_status[i].status == true){
+          for(i=0; i < data.leds.length; ++i){
+            var _pick_div = "#pick_" + data.leds[i].id;
+            if (data.leds[i].status == true){
               $(_pick_div).css('background-color',"limegreen");
             }else{
               $(_pick_div).css('background-color',"red");

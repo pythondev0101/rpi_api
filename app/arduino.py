@@ -1,5 +1,6 @@
 from serial import Serial
 import time
+from app import qLEDStatus
 
 
 class Arduino():
@@ -14,10 +15,13 @@ class Arduino():
             import random
             
             _status = [
-                {'id': 1,'status':random.randint(0,1)},
-                {'id': 2,'status':random.randint(0,1)},
-                {'id': 3,'status':random.randint(0,1)},
-                {'id': 4,'status':random.randint(0,1)},
+                {'id': 1,'status':0}, {'id': 2,'status':0}, {'id': 3,'status':0}, {'id': 4,'status':0},
+                {'id': 5,'status':0}, {'id': 6,'status':0}, {'id': 7,'status':0}, {'id': 8,'status':0},
+                {'id': 9,'status':0}, {'id': 10,'status':0}, {'id': 11,'status':0}, {'id': 12,'status':0},
+                {'id': 13,'status':0}, {'id': 14,'status':0}, {'id': 15,'status':0}, {'id': 16,'status':0},
+                {'id': 17,'status':0}, {'id': 18,'status':0}, {'id': 19,'status':0}, {'id': 20,'status':0},
+                {'id': 21,'status':0}, {'id': 22,'status':0}, {'id': 23,'status':0}, {'id': 24,'status':0},
+                {'id': 25,'status':0}, {'id': 26,'status':0}, {'id': 27,'status':0}, {'id': 28,'status':0},
                 ]
 
             qLEDStatus.put(_status)
@@ -51,5 +55,6 @@ class Arduino():
             'id': id,
             'state': state
         }
+        print(qLEDStatus)
         self.ser.write(_led) # Check kung pwede mag send ng dict ng rekta
         return True

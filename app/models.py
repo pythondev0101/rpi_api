@@ -14,6 +14,7 @@ class User(Base, UserMixin):
 
     username = db.Column(db.String(64), nullable=False, index=True, unique=True)
     password_hash = db.Column(db.String(128), nullable=False)
+    role = db.Column(db.String(64), nullable=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -21,10 +22,10 @@ class User(Base, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def __init__(self,username,password):
+    def __init__(self,username,password, role):
         self.username = username
         self.set_password(password)
-
+        self.role = role
 
 class Recipe(Base):
     __tablename__ = 'recipes'

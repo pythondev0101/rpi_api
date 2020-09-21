@@ -61,7 +61,7 @@ def init_db():
 
 
     if User.query.count() == 0:
-        admin = User("admin", "admin")
+        admin = User("admin", "admin", "admin")
         db.session.add(admin)
         db.session.commit()
         print("Initial user.......success")

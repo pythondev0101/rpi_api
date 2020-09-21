@@ -48,8 +48,8 @@ def control_led(id):
     if 'state' not in request.json:
         abort(400)
     
-    _state = request.json['state']
+    # _state = request.json['state']
 
-    arduino.control_led(id, state)
+    # arduino.control_led(id, state)
 
     return jsonify({"result": True})
